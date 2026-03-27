@@ -1,0 +1,60 @@
+.breadcrumb-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 12px 0; }
+.breadcrumb-inner { display: flex; align-items: center; gap: 8px; font-size: 0.87rem; color: var(--text-muted); flex-wrap: wrap; }
+.breadcrumb-inner a { color: var(--primary); font-weight: 600; }
+.breadcrumb-inner a:hover { text-decoration: underline; }
+.breadcrumb-current { color: var(--text-muted); }
+
+.news-article { padding: 40px; }
+
+.article-header { margin-bottom: 28px; }
+.article-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 900; color: var(--text); margin: 12px 0; line-height: 1.4; }
+.article-meta { display: flex; gap: 20px; flex-wrap: wrap; }
+.meta-item { display: flex; align-items: center; gap: 5px; font-size: 0.83rem; color: var(--text-muted); }
+
+.article-image { margin: 24px 0; border-radius: var(--radius-sm); overflow: hidden; max-height: 480px; }
+.article-image img { width: 100%; height: 100%; object-fit: cover; }
+
+.article-summary {
+  background: #e6f4ec;
+  border-right: 5px solid var(--primary);
+  padding: 18px 22px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 24px 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  line-height: 1.7;
+}
+
+.article-content p {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+.article-share {
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.share-btn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 16px;
+  cursor: pointer;
+  font-family: var(--font-main);
+  font-size: 0.87rem;
+  color: var(--text);
+  transition: var(--transition);
+}
+.share-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+@media (max-width: 600px) {
+  .news-article { padding: 20px; }
+  .article-meta { flex-direction: column; gap: 8px; }
+}
