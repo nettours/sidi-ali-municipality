@@ -16,31 +16,36 @@ const PRIORITY_COLOR = {
   'منخفض': { bg:'#f0f4f0', color:'#6b7280' },
 };
 
-/* ─── Algerian Flag — SVG correct & large ─────────────── */
-function AlgerianFlag({ className = '', size = 80 }) {
-  const w = size, h = Math.round(size * 0.667);
-  return (
-    <svg className={className} width={w} height={h}
-      viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
-      {/* Green half */}
-      <rect x="0"   y="0" width="150" height="200" fill="#006233"/>
-      {/* White half */}
-      <rect x="150" y="0" width="150" height="200" fill="#ffffff"/>
-      {/* White circle (overlapping center) */}
-      <circle cx="155" cy="100" r="55" fill="#ffffff"/>
-      {/* Green circle (crescent cut) */}
-      <circle cx="172" cy="100" r="55" fill="#006233"/>
-      {/* White crescent visible part override */}
-      <circle cx="155" cy="100" r="55" fill="none" stroke="#ffffff" strokeWidth="0"/>
-      {/* Star — 5-pointed, red */}
-      <g transform="translate(147,92) scale(0.9)">
-        <polygon
-          points="10,0 12.35,7.27 19.51,7.27 13.58,11.75 15.93,19.02 10,14.54 4.07,19.02 6.42,11.75 0.49,7.27 7.65,7.27"
-          fill="#d21034"/>
-      </g>
-    </svg>
-  );
-}
+/* ── City stats data ─────────────────────────────────────── */
+const CITY_STATS = [
+  { icon:'👥', num:'~35,000', label:'نسمة' },
+  { icon:'📐', num:'212 كم²', label:'المساحة' },
+  { icon:'🏔️', num:'85 م', label:'الارتفاع عن البحر' },
+  { icon:'🕌', num:'1873', label:'سنة الإنشاء الرسمي' },
+];
+
+const CITY_INFO = [
+  {
+    icon: '🏛️',
+    title: 'نبذة عامة',
+    text: 'سيدي علي مدينة جزائرية تقع في ولاية مستغانم، تُعدّ مركز دائرة سيدي علي. تمتد على مساحة تقدّر بـ 212 كيلومتر مربع، وتضم سكاناً يتجاوز عددهم 35 ألف نسمة. تقع المدينة في السهل الأوسط لولاية مستغانم، وتتميز بطبيعتها الزراعية الخصبة التي تجعلها من أهم مناطق إنتاج القمح والخضروات في المنطقة.'
+  },
+  {
+    icon: '📜',
+    title: 'التاريخ',
+    text: 'تعود جذور المنطقة إلى العهد العثماني، وتأسست البلدية رسمياً إبان الحقبة الاستعمارية الفرنسية عام 1873 تحت اسم "Bosquet". استعادت اسمها الأصلي "سيدي علي" بعد الاستقلال عام 1962، نسبةً إلى الولي الصالح سيدي علي بن يوب الذي يعود إليه تاريخ المنطقة. شهدت المدينة نمواً ملحوظاً خلال العقود الأخيرة على الصعيدين العمراني والخدماتي.'
+  },
+  {
+    icon: '🌾',
+    title: 'الاقتصاد والموارد',
+    text: 'تعتمد مدينة سيدي علي اعتماداً رئيسياً على الزراعة، إذ تمتد سهولها الخصبة لمئات الهكتارات المخصصة لزراعة الحبوب والخضروات وأشجار الزيتون والكروم. يُعدّ القطاع الفلاحي المحرّك الأساسي للاقتصاد المحلي، إلى جانب التجارة والخدمات الإدارية التي تُوفّرها المصالح البلدية وما يتبعها من مرافق.'
+  },
+  {
+    icon: '📍',
+    title: 'الموقع الجغرافي',
+    text: 'تقع سيدي علي في الشمال الغربي للجزائر، ضمن إقليم ولاية مستغانم، على بعد نحو 30 كيلومتراً جنوب شرق مدينة مستغانم. تحدّها شمالاً دائرة حاسي ماماش، وجنوباً دائرة سيدي لخضر، وشرقاً دائرة المشرع. يمر عبر المدينة الطريق الوطني رقم 23، ما يجعلها محطة تربط عدة دوائر ببعضها.'
+  },
+];
 
 export default function HomePage() {
   const [news,     setNews]     = useState([]);
@@ -49,6 +54,7 @@ export default function HomePage() {
   const [annons,   setAnnons]   = useState([]);
   const [loading,  setLoading]  = useState(true);
   const [tickIdx,  setTickIdx]  = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
 
   const fetchAll = useCallback(async () => {
     try {
@@ -79,20 +85,23 @@ export default function HomePage() {
   return (
     <div className="home">
 
-      {/* ═══════════ HERO ════════════════════════════════════ */}
+      {/* ═══════════════════ HERO ═══════════════════════════ */}
       <section className="hero">
-        {/* Real APC Sidi Ali photo */}
         <div className="hero-photo" style={{ backgroundImage:"url('/apc-sidi-ali.jpg')" }} />
         <div className="hero-overlay" />
 
         <div className="container hero-inner">
 
-          {/* ── Left side: text ── */}
+          {/* Left: content */}
           <div className="hero-left anim-slide d1">
 
-            {/* Official header */}
+            {/* Official badge with REAL flag image */}
             <div className="hero-official">
-              <AlgerianFlag size={70} className="hero-flag" />
+              <img
+                src="/drapeau-algerie.jpg"
+                alt="علم الجزائر"
+                className="hero-flag-img"
+              />
               <div className="hero-official-text">
                 <span className="hero-republic">الجمهورية الجزائرية الديمقراطية الشعبية</span>
                 <span className="hero-wilaya">ولاية مستغانم — دائرة سيدي علي</span>
@@ -102,12 +111,12 @@ export default function HomePage() {
             <h1 className="hero-title">
               <span className="ht-pre">بـلـديـة</span>
               <span className="ht-main">سيـدي عـلي</span>
-              <span className="ht-sub">Commune de Sidi Ali</span>
+              <span className="ht-sub">Commune de Sidi Ali — APC</span>
             </h1>
 
             <p className="hero-desc">
-              الموقع الرسمي للمجلس الشعبي البلدي<br/>
-              <em>Site officiel de l'A.P.C Sidi Ali</em>
+              الموقع الرسمي للمجلس الشعبي البلدي — نخدمكم بشفافية ومسؤولية<br/>
+              <em>Site officiel de l'Assemblée Populaire Communale</em>
             </p>
 
             <div className="hero-cta anim-slide d2">
@@ -115,13 +124,12 @@ export default function HomePage() {
               <Link to="/gallery" className="btn btn-outline-white btn-lg">🖼️ معرض الصور</Link>
             </div>
 
-            {/* Stats bar */}
             <div className="hero-stats anim-slide d3">
               {[
-                { n:'+50',  l:'خدمة إدارية' },
-                { n:'24/7', l:'متاح دائماً' },
-                { n:'1962', l:'سنة التأسيس' },
-                { n:'+30K', l:'مواطن' },
+                { n:'~35,000', l:'نسمة' },
+                { n:'212 كم²', l:'المساحة' },
+                { n:'24/7',    l:'خدمة إدارية' },
+                { n:'1962',    l:'الاستقلال' },
               ].map((s, i) => (
                 <div key={i} className="hs">
                   <span className="hs-n">{s.n}</span>
@@ -131,32 +139,31 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ── Right side: APC badge ── */}
+          {/* Right: APC Badge */}
           <div className="hero-right anim-fade d2">
             <div className="apc-badge">
-              <div className="apc-flag-row">
-                <div className="apc-flag-green">
-                  <span className="apc-flag-star">☾★</span>
-                </div>
-                <div className="apc-flag-white"/>
+              <div className="apc-flag-banner">
+                <img src="/drapeau-algerie.jpg" alt="علم الجزائر" className="apc-flag-banner-img"/>
               </div>
               <div className="apc-body">
                 <div className="apc-icon">🏛️</div>
                 <div className="apc-name-ar">المجلس الشعبي البلدي</div>
                 <div className="apc-name-fr">A.P.C Sidi Ali</div>
                 <div className="apc-divider"/>
-                <div className="apc-location">ولاية مستغانم — الجزائر</div>
+                <div className="apc-info-row">
+                  <span>👥 ~35,000 نسمة</span>
+                  <span>📐 212 كم²</span>
+                </div>
+                <div className="apc-location">ولاية مستغانم — شمال غرب الجزائر</div>
               </div>
             </div>
           </div>
-
         </div>
 
-        {/* Scroll hint */}
         <a href="#content" className="hero-scroll-hint">↓</a>
       </section>
 
-      {/* ═══════════ TICKER ══════════════════════════════════ */}
+      {/* ═══════════════════ TICKER ═════════════════════════ */}
       {annons.length > 0 && (
         <div className="ticker" id="content">
           <div className="ticker-tag">📢 إعلان رسمي</div>
@@ -171,7 +178,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ═══════════ ANNOUNCEMENTS ═══════════════════════════ */}
+      {/* ═══════════════════ ANNOUNCEMENTS ══════════════════ */}
       {annons.length > 0 && (
         <section className="section-pad ann-section">
           <div className="container">
@@ -199,7 +206,7 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* ═══════════ NEWS ═════════════════════════════════════ */}
+      {/* ═══════════════════ NEWS ════════════════════════════ */}
       <section className="section-pad news-section">
         <div className="container">
           <div className="sh-row">
@@ -227,9 +234,7 @@ export default function HomePage() {
                       : <div className="nc-img-ph">📰</div>
                     }
                     {item.videoUrl && <span className="nc-video-badge">▶ فيديو</span>}
-                    {(item.images?.length > 0) && (
-                      <span className="nc-multi-badge">🖼 +{item.images.length}</span>
-                    )}
+                    {(item.images?.length > 0) && <span className="nc-multi-badge">🖼 +{item.images.length}</span>}
                     <span className="badge badge-green nc-cat">{item.category}</span>
                   </div>
                   <div className="nc-body">
@@ -247,7 +252,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ═══════════ GALLERY ══════════════════════════════════ */}
+      {/* ═══════════════════ GALLERY ════════════════════════ */}
       {allPhotos.length > 0 && (
         <section className="section-pad gallery-section">
           <div className="container">
@@ -282,14 +287,78 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* ═══════════ SERVICES ═════════════════════════════════ */}
+      {/* ═══════════════════ ABOUT SIDI ALI ═════════════════ */}
+      <section className="section-pad about-section">
+        <div className="container">
+          <div className="sh" style={{ textAlign:'center' }}>
+            <p className="section-eyebrow">🏙️ نبذة عن المدينة</p>
+            <h2 className="section-heading" style={{ display:'inline-block' }}>
+              مدينة <span>سيدي علي</span>
+            </h2>
+            <p className="section-sub" style={{ margin:'10px auto 0', textAlign:'center' }}>
+              تعرّف أكثر على تاريخ وجغرافيا وإمكانيات بلديتنا العريقة
+            </p>
+          </div>
+
+          {/* Stats cards */}
+          <div className="about-stats">
+            {CITY_STATS.map((s, i) => (
+              <div key={i} className={`about-stat-card anim-slide d${i+1}`}>
+                <span className="asc-icon">{s.icon}</span>
+                <span className="asc-num">{s.num}</span>
+                <span className="asc-label">{s.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Tabs */}
+          <div className="about-tabs">
+            {CITY_INFO.map((tab, i) => (
+              <button key={i}
+                className={`about-tab-btn ${activeTab === i ? 'active' : ''}`}
+                onClick={() => setActiveTab(i)}>
+                {tab.icon} {tab.title}
+              </button>
+            ))}
+          </div>
+
+          <div className="about-content card">
+            <div className="about-content-inner">
+              <div className="about-tab-icon">{CITY_INFO[activeTab].icon}</div>
+              <div>
+                <h3 className="about-tab-title">{CITY_INFO[activeTab].title}</h3>
+                <p className="about-tab-text">{CITY_INFO[activeTab].text}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick facts ribbon */}
+          <div className="about-facts">
+            {[
+              { label:'الإدارة',   val:'دائرة سيدي علي، ولاية مستغانم' },
+              { label:'الإحداثيات', val:'36°05′ ش — 0°21′ غ' },
+              { label:'المناخ',    val:'متوسطي معتدل' },
+              { label:'اللغة',     val:'العربية / الأمازيغية' },
+              { label:'الرمز البريدي', val:'27150' },
+              { label:'رقم الدائرة',   val:'2703' },
+            ].map((f, i) => (
+              <div key={i} className="about-fact">
+                <span className="af-label">{f.label}</span>
+                <span className="af-val">{f.val}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ SERVICES ════════════════════════ */}
       <section className="services-strip">
         <div className="container srv-grid">
           {[
-            { icon:'📋', t:'الوثائق الإدارية',   d:'شهادات الميلاد، عقود الزواج، الإقامة' },
-            { icon:'🏗️', t:'المشاريع التنموية',  d:'متابعة أشغال البنية التحتية' },
-            { icon:'🌿', t:'البيئة والنظافة',     d:'جمع النفايات والمساحات الخضراء' },
-            { icon:'🤝', t:'الشؤون الاجتماعية',  d:'دعم الأسر المحتاجة والمساعدات' },
+            { icon:'📋', t:'الوثائق الإدارية',  d:'شهادات الميلاد، عقود الزواج، الإقامة' },
+            { icon:'🏗️', t:'المشاريع التنموية', d:'متابعة أشغال البنية التحتية' },
+            { icon:'🌿', t:'البيئة والنظافة',    d:'جمع النفايات والمساحات الخضراء' },
+            { icon:'🤝', t:'الشؤون الاجتماعية', d:'دعم الأسر المحتاجة والمساعدات' },
           ].map((s, i) => (
             <div key={i} className={`srv-item anim-slide d${i+1}`}>
               <div className="srv-icon">{s.icon}</div>
@@ -302,11 +371,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ═══════════ CTA ══════════════════════════════════════ */}
+      {/* ═══════════════════ CTA ═════════════════════════════ */}
       <section className="cta-section">
         <div className="cta-pattern"/>
         <div className="container cta-inner">
-          <AlgerianFlag size={90} className="cta-flag"/>
+          <img src="/drapeau-algerie.jpg" alt="علم الجزائر" className="cta-flag-img"/>
           <div className="cta-text anim-slide d1">
             <h2>ابقَ على اطلاع دائم بأخبار بلديتك</h2>
             <p>سجّل حساباً مجانياً للحصول على إشعارات بالأخبار والإعلانات</p>
@@ -314,7 +383,54 @@ export default function HomePage() {
           <div className="cta-actions anim-slide d2">
             <Link to="/register" className="btn btn-gold btn-lg">إنشاء حساب مجاناً</Link>
             <a href="https://www.facebook.com/profile.php?id=100063508553211"
-              target="_blank" rel="noreferrer" className="btn btn-white btn-lg">📘 فيسبوك</a>
+              target="_blank" rel="noreferrer" className="btn btn-white btn-lg">📘 تابعنا على فيسبوك</a>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ GOOGLE MAP ══════════════════════ */}
+      <section className="map-section">
+        <div className="map-header">
+          <div className="container">
+            <p className="section-eyebrow">📍 الموقع الجغرافي</p>
+            <h2 className="section-heading">
+              موقع مدينة <span>سيدي علي</span> على الخريطة
+            </h2>
+            <p className="section-sub">
+              دائرة سيدي علي — ولاية مستغانم، الجمهورية الجزائرية الديمقراطية الشعبية
+            </p>
+          </div>
+        </div>
+
+        <div className="map-wrapper">
+          <iframe
+            title="موقع بلدية سيدي علي على خرائط جوجل"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51804.23853821!2d0.1500!3d36.1000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128b7e8e5b5b5b5b%3A0x1234567890abcdef!2sSidi%20Ali%2C%20Mostaganem%2C%20Algeria!5e0!3m2!1sar!2sdz!4v1700000000000!5m2!1sar!2sdz"
+            width="100%"
+            height="480"
+            style={{ border:0, display:'block' }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+          {/* Map info overlay */}
+          <div className="map-info-card">
+            <div className="mic-flag">
+              <img src="/drapeau-algerie.jpg" alt="علم الجزائر" style={{ width:48, borderRadius:4 }}/>
+            </div>
+            <div className="mic-body">
+              <h3>بلدية سيدي علي</h3>
+              <p>📍 ولاية مستغانم، الجزائر</p>
+              <p>🏔️ ارتفاع ~85 متر عن سطح البحر</p>
+              <p>📐 مساحة 212 كيلومتر مربع</p>
+              <a
+                href="https://www.google.com/maps/place/Sidi+Ali,+Mostaganem,+Algeria/@36.1,0.15,13z"
+                target="_blank" rel="noreferrer"
+                className="btn btn-primary btn-sm"
+                style={{ marginTop:12, width:'100%', justifyContent:'center' }}>
+                🗺️ فتح في خرائط جوجل
+              </a>
+            </div>
           </div>
         </div>
       </section>
