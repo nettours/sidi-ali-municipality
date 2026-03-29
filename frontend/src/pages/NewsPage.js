@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { api } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+
 import Loader from '../components/Loader';
 import './NewsPage.css';
 
@@ -24,7 +25,7 @@ export default function NewsPage() {
       try {
         const params = { page, limit: 9 };
         if (category !== 'الكل') params.category = category;
-        const res = await axios.get('/news', { params });
+        const res = await api.get('/news', { params });
         setNews(res.data.data || []);
         setPages(res.data.pages || 1);
       } catch (err) {

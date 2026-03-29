@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+
 import Loader from '../components/Loader';
 import './GalleryPage.css';
 
@@ -23,7 +23,7 @@ export default function GalleryPage() {
       try {
         const params = { page, limit: 12 };
         if (category !== 'الكل') params.category = category;
-        const res = await axios.get('/gallery', { params });
+        const res = await api.get('/gallery', { params });
         setPhotos(res.data.data || []);
         setPages(res.data.pages || 1);
       } catch (e) { console.error(e); }
