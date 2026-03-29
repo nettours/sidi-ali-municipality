@@ -82,6 +82,8 @@
   background-clip: text;
   filter: drop-shadow(0 4px 20px rgba(0,0,0,0.35));
   margin-bottom: 6px;
+  padding-bottom: 30px;
+  
 }
 .ht-sub {
   font-size: clamp(0.78rem,1.5vw,0.92rem); font-weight: 400;
