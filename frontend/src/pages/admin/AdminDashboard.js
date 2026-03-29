@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import axios from 'axios';
+import { useAuth, api } from '../../context/AuthContext';
+
 import toast from 'react-hot-toast';
 import './AdminLayout.css';
 
@@ -23,9 +23,9 @@ export default function AdminDashboard() {
     const fetchStats = async () => {
       try {
         const [n, g, a] = await Promise.all([
-          axios.get('/news/all'),
-          axios.get('/gallery'),
-          axios.get('/announcements/all'),
+          api.get('/news/all'),
+          api.get('/gallery'),
+          api.get('/announcements/all'),
         ]);
         setStats({
           news:    n.data.data?.length || 0,
