@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { api } from '../context/AuthContext';
 import Loader from '../components/Loader';
 import './NewsDetail.css';
@@ -10,15 +10,22 @@ const BASE = process.env.REACT_APP_API_URL
 
 const imgSrc = (url) => !url ? null : url.startsWith('http') ? url : `${BASE}${url}`;
 
-export default function NewsDetail() {
-  const { id }    = useParams();
-  const navigate  = useNavigate();
+function getAllImages(news) {
+  if (!news) return [];
+  const arr = [];
+  if (news.image) arr.push(news.image);
+  if (news.images?.length) arr.push(...news.images);
+  return arr;
+}
 
-  const [news,      setNews]      = useState(null);
-  const [loading,   setLoading]   = useState(true);
-  const [error,     setError]     = useState('');
-  const [lightbox,  setLightbox]  = useState(null); // index into allImages
-  const [copied,    setCopied]    = useState(false);
+export default function NewsDetail() {
+  const { id } = useParams();
+
+  const [news,     setNews]     = useState(null);
+  const [loading,  setLoading]  = useState(true);
+  const [error,    setError]    = useState('');
+  const [lightbox, setLightbox] = useState(null);
+  const [copied,   setCopied]   = useState(false);
 
   const fetchNews = useCallback(async () => {
     try {
@@ -30,7 +37,7 @@ export default function NewsDetail() {
         setError('الخبر غير موجود');
       }
     } catch (e) {
-      console.error('NewsDetail error:', e);
+      console.error('NewsDetail fetch error:', e);
       setError(e.response?.data?.message || 'تعذّر تحميل الخبر');
     } finally {
       setLoading(false);
@@ -39,7 +46,6 @@ export default function NewsDetail() {
 
   useEffect(() => { fetchNews(); }, [fetchNews]);
 
-  // keyboard lightbox
   useEffect(() => {
     if (lightbox === null) return;
     const allImages = getAllImages(news);
@@ -74,8 +80,6 @@ export default function NewsDetail() {
 
   return (
     <div className="nd-page">
-
-      {/* ── Hero Image ───────────────────────────────────────── */}
       {news.image && (
         <div className="nd-hero" onClick={() => setLightbox(0)} style={{ cursor:'zoom-in' }}>
           <img src={imgSrc(news.image)} alt={news.title} />
@@ -85,7 +89,6 @@ export default function NewsDetail() {
         </div>
       )}
 
-      {/* ── Breadcrumb ─────────────────────────────────────── */}
       <div className="nd-breadcrumb">
         <div className="container nd-breadcrumb-inner">
           <Link to="/">الرئيسية</Link>
@@ -97,11 +100,7 @@ export default function NewsDetail() {
       </div>
 
       <div className="container nd-layout section-pad">
-
-        {/* ── Article ───────────────────────────────────────── */}
         <article className="nd-article card">
-
-          {/* Header */}
           <div className="nd-header">
             {!news.image && <span className="badge badge-green">{news.category}</span>}
             <h1 className="nd-title">{news.title}</h1>
@@ -114,24 +113,42 @@ export default function NewsDetail() {
             </div>
           </div>
 
-          {/* Summary blockquote */}
           {news.summary && (
             <blockquote className="nd-summary">{news.summary}</blockquote>
           )}
 
-          {/* Body */}
           <div className="nd-body">
             {news.content.split('\n').map((para, i) =>
-              para.trim()
-                ? <p key={i}>{para}</p>
-                : <br key={i} />
+              para.trim() ? <p key={i}>{para}</p> : <br key={i} />
             )}
           </div>
 
-          {/* Extra images gallery */}
+          {/* Video player */}
+          {news.videoUrl && (
+            <div className="nd-video">
+              <h3 className="nd-gallery-title">🎬 الفيديو المرفق</h3>
+              {news.videoUrl.includes('youtube.com') || news.videoUrl.includes('youtu.be') ? (
+                <div className="nd-video-embed">
+                  <iframe
+                    src={getYoutubeEmbed(news.videoUrl)}
+                    title="فيديو الخبر"
+                    frameBorder="0"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <video controls className="nd-video-native">
+                  <source src={imgSrc(news.videoUrl)} />
+                  متصفحك لا يدعم تشغيل الفيديو.
+                </video>
+              )}
+            </div>
+          )}
+
+          {/* Extra images */}
           {news.images?.length > 0 && (
             <div className="nd-gallery">
-              <h3 className="nd-gallery-title">📷 الصور المرفقة</h3>
+              <h3 className="nd-gallery-title">📷 الصور المرفقة ({news.images.length})</h3>
               <div className="nd-gallery-grid">
                 {news.images.map((img, idx) => (
                   <div key={idx} className="nd-gallery-item"
@@ -145,28 +162,26 @@ export default function NewsDetail() {
             </div>
           )}
 
-          {/* Share */}
           <div className="nd-share">
-            <span>مشاركة الخبر:</span>
+            <span>مشاركة:</span>
             <button className="nd-share-btn" onClick={copyLink}>
               {copied ? '✅ تم النسخ!' : '📋 نسخ الرابط'}
             </button>
             <a className="nd-share-btn fb"
               href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
               target="_blank" rel="noreferrer">
-              📘 مشاركة على فيسبوك
+              📘 فيسبوك
             </a>
           </div>
         </article>
 
-        {/* ── Back button ──────────────────────────────────── */}
         <div className="nd-back">
-          <Link to="/news" className="btn btn-outline">← العودة إلى الأخبار</Link>
-          <Link to="/"    className="btn btn-primary" style={{ marginRight:'10px' }}>🏠 الرئيسية</Link>
+          <Link to="/"    className="btn btn-primary">🏠 الرئيسية</Link>
+          <Link to="/news" className="btn btn-outline">← كل الأخبار</Link>
         </div>
       </div>
 
-      {/* ── Lightbox ─────────────────────────────────────────── */}
+      {/* Lightbox */}
       {lightbox !== null && allImages[lightbox] && (
         <div className="nd-lightbox" onClick={() => setLightbox(null)}>
           <button className="nd-lb-close" onClick={() => setLightbox(null)}>✕</button>
@@ -188,11 +203,9 @@ export default function NewsDetail() {
   );
 }
 
-// collect main image + extra images into one array
-function getAllImages(news) {
-  if (!news) return [];
-  const arr = [];
-  if (news.image)  arr.push(news.image);
-  if (news.images?.length) arr.push(...news.images);
-  return arr;
+function getYoutubeEmbed(url) {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match  = url.match(regExp);
+  const id     = match?.[2];
+  return id ? `https://www.youtube.com/embed/${id}` : url;
 }

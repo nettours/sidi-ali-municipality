@@ -134,3 +134,13 @@
   .nd-gallery-grid { grid-template-columns: repeat(2, 1fr); }
   .nd-back { flex-direction: column; }
 }
+
+/* ── Video ─────────────────────────────────────────── */
+.nd-video { margin:28px 0;padding-top:24px;border-top:1px solid var(--border); }
+.nd-gallery-title { font-size:1rem;font-weight:800;color:var(--gray-900);margin-bottom:14px; }
+.nd-video-embed {
+  position:relative;padding-bottom:56.25%;height:0;overflow:hidden;
+  border-radius:var(--radius-sm);background:#000;
+}
+.nd-video-embed iframe { position:absolute;top:0;left:0;width:100%;height:100%;border:none; }
+.nd-video-native { width:100%;border-radius:var(--radius-sm);max-height:480px;background:#000; }

@@ -32,6 +32,8 @@ export default function AdminNews() {
   const [mainPrev,  setMainPrev]  = useState(null);      // URL
   const [extraImgs, setExtraImgs] = useState([]);        // File[]
   const [extraPrev, setExtraPrev] = useState([]);        // URL[]
+  const [videoUrl,  setVideoUrl]  = useState('');         // YouTube link
+  const [videoFile, setVideoFile] = useState(null);       // File
   const [saving,    setSaving]    = useState(false);
   const [deleteId,  setDeleteId]  = useState(null);
   const [sideOpen,  setSideOpen]  = useState(false);
@@ -51,6 +53,7 @@ export default function AdminNews() {
     setEditItem(null); setForm(EMPTY);
     setMainImg(null); setMainPrev(null);
     setExtraImgs([]); setExtraPrev([]);
+    setVideoUrl(''); setVideoFile(null);
     setModal(true);
   };
 
@@ -59,7 +62,8 @@ export default function AdminNews() {
     setForm({ title:item.title, content:item.content, summary:item.summary||'', category:item.category, isPublished:item.isPublished });
     setMainPrev(item.image ? imgSrc(item.image) : null);
     setExtraPrev((item.images||[]).map(imgSrc));
-    setMainImg(null); setExtraImgs([]);
+    setVideoUrl(item.videoUrl||'');
+    setMainImg(null); setExtraImgs([]); setVideoFile(null);
     setModal(true);
   };
 
@@ -88,6 +92,8 @@ export default function AdminNews() {
       fd.append('isPublished', form.isPublished);
       if (mainImg)  fd.append('image', mainImg);
       extraImgs.forEach(f => fd.append('images', f));
+      if (videoUrl.trim()) fd.append('videoUrl', videoUrl.trim());
+      if (videoFile) fd.append('videoFile', videoFile);
 
       if (editItem) {
         await api.put(`/news/${editItem._id}`, fd);
@@ -255,6 +261,25 @@ export default function AdminNews() {
                 <small style={{color:'var(--text-muted)',fontSize:'0.75rem'}}>يمكنك اختيار عدة صور دفعة واحدة (Ctrl+Click)</small>
               </div>
 
+
+              {/* Video section */}
+              <div style={{ background:'#f8faf8', border:'1px solid var(--border)', borderRadius:'var(--radius-sm)', padding:'16px', marginBottom:'16px' }}>
+                <label className="form-label">🎬 فيديو مرفق (اختياري)</label>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr', gap:'10px' }}>
+                  <div>
+                    <label style={{ fontSize:'0.82rem', color:'var(--text-muted)', marginBottom:'5px', display:'block' }}>رابط يوتيوب أو فيديو خارجي</label>
+                    <input className="form-control" dir="ltr" value={videoUrl}
+                      onChange={e=>setVideoUrl(e.target.value)}
+                      placeholder="https://www.youtube.com/watch?v=..." />
+                  </div>
+                  <div>
+                    <label style={{ fontSize:'0.82rem', color:'var(--text-muted)', marginBottom:'5px', display:'block' }}>أو ارفع ملف فيديو (MP4 حتى 100MB)</label>
+                    <input type="file" accept="video/mp4,video/webm,video/ogg" className="form-control"
+                      onChange={e=>setVideoFile(e.target.files[0]||null)}/>
+                    {videoFile && <small style={{color:'var(--primary)',fontWeight:700}}>✅ {videoFile.name}</small>}
+                  </div>
+                </div>
+              </div>
               <div className="modal-actions">
                 <button type="button" className="btn btn-outline" onClick={()=>setModal(false)}>إلغاء</button>
                 <button type="submit" className="btn btn-primary" disabled={saving}>
