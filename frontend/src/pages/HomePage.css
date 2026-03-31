@@ -82,8 +82,12 @@
   background-clip: text;
   filter: drop-shadow(0 4px 20px rgba(0,0,0,0.35));
   margin-bottom: 6px;
+<<<<<<< HEAD
   padding-bottom: 30px;
   
+=======
+  padding-bottom : 30px;
+>>>>>>> 0bb11be (v6.1.1: fix news detail + multi-images + professional UI)
 }
 .ht-sub {
   font-size: clamp(0.78rem,1.5vw,0.92rem); font-weight: 400;
