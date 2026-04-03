@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import NewsTicker from './NewsTicker';
 import toast from 'react-hot-toast';
 import './Navbar.css';
 
 const NAV = [
-  { to: '/',        label: 'الرئيسية' },
-  { to: '/news',    label: 'الأخبار'  },
+  { to: '/',        label: 'الرئيسية'   },
+  { to: '/news',    label: 'الأخبار'    },
   { to: '/gallery', label: 'معرض الصور' },
 ];
 
 export default function Navbar() {
   const { user, logout, isAdmin } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
   const [scrolled,  setScrolled]  = useState(false);
   const [menuOpen,  setMenuOpen]  = useState(false);
 
@@ -31,8 +32,13 @@ export default function Navbar() {
     navigate('/');
   };
 
+  // hide ticker on admin pages
+  const showTicker = !location.pathname.startsWith('/admin')
+    && !location.pathname.startsWith('/login')
+    && !location.pathname.startsWith('/register');
+
   return (
-    <>
+    <div className="navbar-wrapper">
       <nav className={`navbar ${scrolled ? 'navbar-scrolled' : 'navbar-top'}`}>
         <div className="navbar-inner">
 
@@ -41,7 +47,9 @@ export default function Navbar() {
             <div className="nav-logo-emblem">
               <svg viewBox="0 0 44 44" fill="none">
                 <circle cx="22" cy="22" r="20" stroke="currentColor" strokeWidth="2"/>
-                <path d="M22 6 L34 18 L34 38 L10 38 L10 18 Z" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+                <path d="M22 6 L34 18 L34 38 L10 38 L10 18 Z"
+                  fill="currentColor" opacity="0.15"
+                  stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
                 <rect x="17" y="26" width="10" height="12" rx="1.5" fill="currentColor"/>
                 <circle cx="22" cy="17" r="4" fill="currentColor" opacity="0.75"/>
               </svg>
@@ -56,9 +64,10 @@ export default function Navbar() {
           <ul className="nav-links">
             {NAV.map(n => (
               <li key={n.to}>
-                <Link to={n.to} className={`nav-link ${location.pathname === n.to ? 'active' : ''}`}>
+                <Link to={n.to}
+                  className={`nav-link ${location.pathname === n.to ? 'active' : ''}`}>
                   {n.label}
-                  {location.pathname === n.to && <span className="nav-active-line" />}
+                  {location.pathname === n.to && <span className="nav-active-line"/>}
                 </Link>
               </li>
             ))}
@@ -76,9 +85,7 @@ export default function Navbar() {
                 <button className="btn btn-primary btn-sm" onClick={handleLogout}>خروج</button>
               </div>
             ) : (
-              <Link to="/login" className="btn btn-primary">
-                تسجيل الدخول
-              </Link>
+              <Link to="/login" className="btn btn-primary">تسجيل الدخول</Link>
             )}
           </div>
 
@@ -97,7 +104,7 @@ export default function Navbar() {
               {n.label}
             </Link>
           ))}
-          <hr style={{ borderColor: 'var(--border)', margin: '8px 0' }} />
+          <hr style={{ borderColor:'var(--border)', margin:'8px 0' }}/>
           {user ? (
             <>
               <div className="drawer-user">
@@ -105,7 +112,9 @@ export default function Navbar() {
                 <span>{user.name}</span>
               </div>
               {isAdmin() && <Link to="/admin" className="drawer-link">⚙️ لوحة التحكم</Link>}
-              <button className="btn btn-danger" style={{ width:'100%', marginTop:'8px' }} onClick={handleLogout}>تسجيل الخروج</button>
+              <button className="btn btn-danger"
+                style={{ width:'100%', marginTop:'8px' }}
+                onClick={handleLogout}>تسجيل الخروج</button>
             </>
           ) : (
             <div style={{ display:'flex', gap:'8px', flexDirection:'column' }}>
@@ -115,6 +124,9 @@ export default function Navbar() {
           )}
         </div>
       </nav>
-    </>
+
+      {/* ── NEWS TICKER — below navbar ── */}
+      {showTicker && <NewsTicker />}
+    </div>
   );
 }

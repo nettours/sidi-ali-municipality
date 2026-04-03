@@ -7,7 +7,13 @@ const BASE = process.env.REACT_APP_API_URL
   ? process.env.REACT_APP_API_URL.replace('/api', '')
   : 'http://localhost:5000';
 
-const imgSrc = (url) => !url ? null : url.startsWith('http') ? url : `${BASE}${url}`;
+// Works with both Cloudinary URLs (https://...) and local /uploads/...
+const imgSrc = (url) => {
+  if (!url) return null;
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  return `${BASE}${url}`;
+};
+
 
 const PRIORITY_COLOR = {
   'عاجل':  { bg:'#fde8e8', color:'#c0392b' },
@@ -33,12 +39,7 @@ const CITY_INFO = [
   {
     icon: '📜',
     title: 'التاريخ',
-<<<<<<< HEAD
     text: 'تعود جذور المنطقة إلى العهد العثماني، وتأسست البلدية رسمياً إبان الحقبة الاستعمارية الفرنسية عام 1873 تحت اسم "Bosquet". استعادت اسمها الأصلي "سيدي علي" بعد الاستقلال عام 1962، نسبةً إلى الولي الصالح سيدي علي بن يوب الذي يعود إليه تاريخ المنطقة. شهدت المدينة نمواً ملحوظاً خلال العقود الأخيرة على الصعيدين العمراني والخدماتي.'
-
-=======
-    text: 'تعود جذور المنطقة إلى العهد العثماني، وتأسست البلدية رسمياً إبان الحقبة الاستعمارية الفرنسية عام 1873 تحت اسم "kassein". استعادت اسمها الأصلي "سيدي علي" بعد الاستقلال عام 1962، نسبةً إلى الولي الصالح سيدي علي بن يوب الذي يعود إليه تاريخ المنطقة. شهدت المدينة نمواً ملحوظاً خلال العقود الأخيرة على الصعيدين العمراني والخدماتي.'
->>>>>>> 71b603f3ae0af2e377c8528b3270f5b81ee0cd5b
   },
   {
     icon: '🌾',

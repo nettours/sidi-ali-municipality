@@ -59,7 +59,7 @@
 
   /* Layout */
   --font:      'Cairo', 'Tajawal', sans-serif;
-  --navbar-h:  72px;
+  --navbar-h:  116px; /* 72px navbar + 44px ticker */
 }
 
 /* ── Reset ──────────────────────────────────── */

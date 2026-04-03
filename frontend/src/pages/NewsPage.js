@@ -5,9 +5,16 @@ import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import './NewsPage.css';
 
-const BASE_URL = process.env.REACT_APP_API_URL
+const BASE = process.env.REACT_APP_API_URL
   ? process.env.REACT_APP_API_URL.replace('/api', '')
   : 'http://localhost:5000';
+
+// Works with both Cloudinary URLs (https://...) and local /uploads/...
+const imgSrc = (url) => {
+  if (!url) return null;
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  return `${BASE}${url}`;
+};
 
 const CATEGORIES = ['الكل', 'عام', 'صحة', 'تعليم', 'بنية تحتية', 'ثقافة', 'رياضة', 'أخرى'];
 

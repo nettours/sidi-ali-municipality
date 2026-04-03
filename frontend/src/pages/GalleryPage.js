@@ -3,11 +3,17 @@ import { api } from '../context/AuthContext';
 import Loader from '../components/Loader';
 import './GalleryPage.css';
 
-const BASE_URL = process.env.REACT_APP_API_URL
+const BASE = process.env.REACT_APP_API_URL
   ? process.env.REACT_APP_API_URL.replace('/api', '')
   : 'http://localhost:5000';
 
-const imgSrc = (url) => !url ? null : url.startsWith('http') ? url : `${BASE_URL}${url}`;
+// Works with both Cloudinary URLs (https://...) and local /uploads/...
+const imgSrc = (url) => {
+  if (!url) return null;
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  return `${BASE}${url}`;
+};
+
 const CATS = ['الكل', 'فعاليات', 'مشاريع', 'بنية تحتية', 'طبيعة', 'أخرى'];
 
 export default function GalleryPage() {
