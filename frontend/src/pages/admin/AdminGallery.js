@@ -52,7 +52,7 @@ export default function AdminGallery() {
 
   useEffect(() => { fetchPhotos(); }, []);
 
-  const imgUrl = (url) => url?.startsWith('http') ? url : `${BASE_URL}${url}`;
+  const imgUrl = (url) => imgSrc(url);
 
   const openCreate = () => { setEditItem(null); setForm(EMPTY); setImage(null); setPreview(null); setModal(true); };
 

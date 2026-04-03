@@ -102,7 +102,7 @@ export default function NewsPage() {
                 style={{ animationDelay: `${idx * 0.07}s` }}>
                 {item.image ? (
                   <div className="full-news-img">
-                    <img src={`${BASE_URL}${item.image}`} alt={item.title} loading="lazy" />
+                    <img src={imgSrc(item.image)} alt={item.title} loading="lazy" />
                   </div>
                 ) : (
                   <div className="full-news-img no-image">
