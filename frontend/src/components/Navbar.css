@@ -1,67 +1,69 @@
-/* ── Wrapper holds navbar + ticker together ────────── */
+/* ══ Navbar Wrapper ════════════════════════════════════════ */
 .navbar-wrapper {
   position: fixed;
   top: 0; right: 0; left: 0;
   z-index: 1000;
 }
 
-/* ── Navbar ──────────────────────────────────────── */
+/* ══ Navbar ════════════════════════════════════════════════ */
 .navbar {
-  height: var(--navbar-h);
-  transition: all 0.35s var(--ease);
+  height: 64px;
+  transition: all 0.3s var(--ease);
 }
+
+@media (min-width: 769px) {
+  .navbar { height: 72px; }
+}
+
 .navbar-top {
-  background: rgba(10,61,31,0.15);
-  backdrop-filter: blur(20px) saturate(1.5);
-  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  background: rgba(10,61,31,0.18);
+  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 .navbar-scrolled {
   background: rgba(255,255,255,0.97);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 2px 20px rgba(10,61,31,0.08);
+  box-shadow: 0 2px 16px rgba(10,61,31,0.09);
 }
 
 .navbar-inner {
   max-width: 1200px; margin: 0 auto;
-  padding: 0 24px; height: 100%;
-  display: flex; align-items: center; gap: 28px;
+  padding: 0 16px; height: 100%;
+  display: flex; align-items: center; gap: 16px;
 }
 
-/* ── Logo ─────────────────────────────────────────── */
+/* ── Logo ──────────────────────────────────────── */
 .nav-logo {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 10px;
   text-decoration: none; flex-shrink: 0;
-  transition: opacity var(--duration) var(--ease);
 }
-.nav-logo:hover { opacity: 0.85; }
-
 .nav-logo-emblem {
-  width: 42px; height: 42px; flex-shrink: 0;
-  color: var(--primary); transition: transform 0.4s var(--ease);
+  width: 38px; height: 38px; flex-shrink: 0;
+  color: var(--primary); transition: transform 0.35s var(--ease);
 }
 .navbar-top .nav-logo-emblem { color: #fff; }
 .nav-logo:hover .nav-logo-emblem { transform: scale(1.08) rotate(3deg); }
 
 .nav-logo-text { display: flex; flex-direction: column; }
 .nav-logo-ar {
-  font-size: 0.98rem; font-weight: 900; line-height: 1.15;
+  font-size: 0.92rem; font-weight: 900; line-height: 1.15;
   color: var(--primary-dark);
 }
 .navbar-top .nav-logo-ar { color: #fff; }
-.nav-logo-fr { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.2px; }
-.navbar-top .nav-logo-fr { color: rgba(255,255,255,0.65); }
+.nav-logo-fr { font-size: 0.6rem; color: var(--text-muted); }
+.navbar-top .nav-logo-fr { color: rgba(255,255,255,0.6); }
 
-/* ── Nav Links ────────────────────────────────────── */
+/* ── Desktop links ─────────────────────────────── */
 .nav-links {
   display: flex; list-style: none; gap: 2px; margin-right: auto;
 }
 .nav-link {
   position: relative; display: block;
-  padding: 8px 15px; border-radius: var(--radius-xs);
-  font-size: 0.92rem; font-weight: 700;
+  padding: 7px 13px; border-radius: var(--radius-xs);
+  font-size: 0.9rem; font-weight: 700;
   color: var(--text-muted); transition: var(--transition);
 }
 .navbar-top .nav-link { color: rgba(255,255,255,0.82); }
@@ -75,27 +77,29 @@
 }
 .navbar-top .nav-active-line { background: var(--gold-light); }
 
-/* ── Auth ─────────────────────────────────────────── */
+/* ── Auth ──────────────────────────────────────── */
 .nav-auth { flex-shrink: 0; }
-.nav-user { display: flex; align-items: center; gap: 10px; }
+.nav-user { display: flex; align-items: center; gap: 8px; }
 .nav-avatar {
-  width: 34px; height: 34px; border-radius: 50%;
+  width: 32px; height: 32px; border-radius: 50%;
   background: var(--primary); color: #fff;
   display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 0.9rem;
+  font-weight: 800; font-size: 0.85rem;
 }
 .navbar-top .nav-avatar { background: var(--gold); color: var(--green-900); }
-.nav-username { font-weight: 700; font-size: 0.88rem; color: var(--text); }
+.nav-username { font-weight: 700; font-size: 0.85rem; color: var(--text); }
 .navbar-top .nav-username { color: #fff; }
 
-/* ── Burger ───────────────────────────────────────── */
+/* ── Burger ────────────────────────────────────── */
 .nav-burger {
   display: none; flex-direction: column; gap: 5px;
   background: none; border: none; cursor: pointer;
-  padding: 6px; margin-right: auto;
+  padding: 8px; margin-right: auto; border-radius: 8px;
+  transition: background 0.2s;
 }
+.nav-burger:hover { background: rgba(255,255,255,0.1); }
 .nav-burger span {
-  display: block; width: 23px; height: 2.5px;
+  display: block; width: 22px; height: 2.5px;
   background: var(--green-800); border-radius: 2px;
   transition: var(--transition); transform-origin: center;
 }
@@ -104,18 +108,18 @@
 .nav-burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .nav-burger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
-/* ── Mobile Drawer ────────────────────────────────── */
+/* ── Mobile drawer ─────────────────────────────── */
 .nav-drawer {
-  display: none; flex-direction: column; gap: 4px;
-  background: #fff; padding: 12px 20px 20px;
+  display: none; flex-direction: column; gap: 3px;
+  background: #fff; padding: 10px 16px 18px;
   border-top: 1px solid var(--border);
   max-height: 0; overflow: hidden;
-  transition: max-height 0.3s var(--ease);
+  transition: max-height 0.3s var(--ease), padding 0.3s;
 }
-.nav-drawer.open { max-height: 500px; }
+.nav-drawer.open { max-height: 480px; }
 .drawer-link {
-  display: block; padding: 12px 16px; border-radius: var(--radius-xs);
-  font-weight: 700; font-size: 0.92rem; color: var(--text-muted);
+  display: block; padding: 11px 14px; border-radius: var(--radius-xs);
+  font-weight: 700; font-size: 0.9rem; color: var(--text-muted);
   transition: var(--transition); text-decoration: none;
 }
 .drawer-link:hover, .drawer-link.active {
@@ -123,14 +127,14 @@
 }
 .drawer-user {
   display: flex; align-items: center; gap: 10px;
-  padding: 8px 0; font-weight: 700;
+  padding: 8px 4px; font-weight: 700; color: var(--text);
 }
+.drawer-hr { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
 
-/* ── Responsive ───────────────────────────────────── */
+/* ══ Responsive ════════════════════════════════════════════ */
 @media (max-width: 900px) {
   .nav-links { display: none; }
   .nav-auth  { display: none; }
   .nav-burger { display: flex; }
   .nav-drawer { display: flex; }
-  .navbar-inner { gap: 12px; }
 }
