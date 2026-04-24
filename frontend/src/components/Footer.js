@@ -70,7 +70,7 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <div className="container">
-          <p>©  بلدية سيدي علي. جميع الحقوق محفوظة.</p>
+          <p>© {year} بلدية سيدي علي. جميع الحقوق محفوظة.</p>
           <p>Réalisé par <a href="https://snetpeodz.com" target="_blank">SnetProDz.com</a></p>
         </div>
       </div>
